@@ -1,6 +1,7 @@
 import sys
 import pyautogui
 import keyboard
+import strings
 
 
 class PainlessMouseController:
@@ -12,6 +13,10 @@ class PainlessMouseController:
 
         self.KEYS = {"up": "up", "down": "down", "right": "right", "left": "left"}
         self.__set_preferences()
+
+        if "--help" in sys.argv:
+            print(strings.HELP_TEXT)
+            sys.exit(0)
 
     def __digit_indx(self) -> int:
         """Find the index of digit in sys arguments"""
@@ -68,16 +73,7 @@ class PainlessMouseController:
 
     def run(self):
         if self.VERBOSE:
-            print(
-                """
-        $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-        $$$$$ PAINLESS MOUSE CONTROLLER $$$$$
-        $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-
-                - Aquib (aquib-shaikh@outlook.com)
-        \n\n    
-        """
-            )
+            print(strings.INTRO_TEXT)
         while True:
             self.traverse()
             self.click()
