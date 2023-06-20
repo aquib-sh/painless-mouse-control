@@ -1,3 +1,9 @@
+import os
+import env_setup_tools
+
+if os.name == "posix":
+    env_setup_tools.configure_posix_environment()
+
 import sys
 import pyautogui
 import keyboard
