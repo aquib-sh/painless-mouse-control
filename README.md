@@ -65,6 +65,13 @@ The Painless Mouse Controller provides the following functionalities:
 
 - Press and hold `Ctrl` + `Space` to perform a mouse click at the current cursor position.
 
+### Jump
+- Jump a significant portion of the screen either to the left or right.
+
+    - Hold `Ctrl` and press:
+        - `Shift` + `Tab`: Jump backwards (to the left side).
+        - `Tab`: Jump forwards (to the right side).
+
 ## Customization
 
 The Painless Mouse Controller provides some customization options through command-line arguments:

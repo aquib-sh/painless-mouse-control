@@ -66,6 +66,14 @@ class PainlessMouseController:
             if self.VERBOSE:
                 print(pyautogui.position())
 
+    def jump(self) -> None:
+        """Jumps a significant portion of screen either to left or right part"""
+        if keyboard.is_pressed("ctrl") and keyboard.is_pressed("tab"):
+            if keyboard.is_pressed("shift"):  # Jump backwards (left side)
+                pyautogui.move(-350, 0)
+            else:
+                pyautogui.move(350, 0)  # Jump forwards (right side)
+
     def click(self) -> None:
         """Simply clicks on a location."""
         if keyboard.is_pressed("ctrl") and keyboard.is_pressed("space"):
@@ -77,6 +85,7 @@ class PainlessMouseController:
         while True:
             self.traverse()
             self.click()
+            self.jump()
 
 
 if __name__ == "__main__":
