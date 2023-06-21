@@ -4,6 +4,7 @@ Tired of dragging your right hand to the mouse? This tool allows you to control 
 
 
 The Painless Mouse Controller is a Python tool that allows you to control your mouse cursor and perform mouse clicks using keyboard shortcuts. This tool utilizes the `pyautogui` and `keyboard` libraries to provide easy mouse control without the need for manual mouse movements.
+</br><b>Note</b>: Currently the script has only been developed and tested on Linux
 
 ## Prerequisites
 
