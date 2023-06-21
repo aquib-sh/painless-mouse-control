@@ -57,9 +57,9 @@ The Painless Mouse Controller provides the following functionalities:
 
   Note: The cursor movement speed can be adjusted by specifying a speed parameter when running the script. For example:
   ```
-  python pmc.py 2
+  python pmc.py 4
   ```
-  This sets the speed to 2, making the cursor movement faster.
+  This sets the speed to 4, making the cursor movement faster.
 
 ### Mouse Click
 
@@ -99,6 +99,92 @@ python pmc.py --verbose --vim 8
 ## Exiting the Program
 
 To exit the Painless Mouse Controller, simply close the terminal or command prompt where the script is running.
+
+## Steps to Create a systemctl .service File on Linux
+
+Follow these steps to create a `.service` file for your service:
+
+1. Open a terminal your Linux system.
+
+2. Navigate to the appropriate directory where `.service` files are stored. On most systems, this is typically `/etc/systemd/system/`.
+
+   ```bash
+   cd /etc/systemd/system/
+   ```
+
+3. Create a new `.service` file using a text editor (e.g., `nano`, `vim`).
+
+   ```bash
+   sudo nano pmc.service
+   ```
+
+4. In the text editor, add the following content to the `.service` file:
+
+   ```ini
+   [Unit]
+   Description=Painless Mouse Controller
+   After=multi-user.target
+   
+   [Service]
+   ExecStart=/usr/bin/python3 /path/to/your/painless-mouse-control/pmc.py --verbose 8
+   WorkingDirectory=/path/to/your/painless-mouse-control
+   User=root
+   Group=root
+   Restart=always
+   
+   [Install]
+   WantedBy=multi-user.target
+   ```
+
+   Modify the content to fit your specific service:
+   - Modify `/path/to/your/` to the actual path of your painless-mouse-controller's directory.
+   - Customize other options within the `[Service]` section as per your requirements. You can explore additional options in the systemd documentation.
+
+5. Save the file and exit the text editor.
+
+6. Run the following command to reload the systemd daemon and make it aware of the new `.service` file:
+
+   ```bash
+   sudo systemctl daemon-reload
+   ```
+
+7. Start your service using the `systemctl` command:
+
+   ```bash
+   sudo systemctl start pmc
+   ```
+
+8. Verify that your service is running correctly:
+
+   ```bash
+   sudo systemctl status pmc
+   ```
+
+   This command will display the current status of your service.
+
+9. Enable your service to start automatically at boot:
+
+    ```bash
+    sudo systemctl enable pmc
+    ```
+
+    This will create the necessary symlinks to ensure your service starts automatically.
+
+Congratulations! You have successfully created a `.service` file for `systemctl` and started your custom service.
+
+## Managing the Service
+
+Now that your service is set up, you can use various `systemctl` commands to manage it:
+
+- To start the service: `sudo systemctl start pmc`
+- To stop the service: `sudo systemctl stop pmc`
+- To restart the service: `sudo systemctl restart pmc`
+- To check the status of the service: `sudo systemctl status pmc`
+- To enable the service to start at boot: `sudo systemctl enable pmc`
+- To disable the service from starting at boot: `sudo systemctl disable pmc`
+
+For more advanced usage and additional options, refer to the `systemctl` documentation.
+
 
 ## Contact
 
