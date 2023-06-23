@@ -1,75 +1,56 @@
+from argparse import ArgumentParser, RawTextHelpFormatter
 import os
 import env_setup_tools
 
 if os.name == "posix":
     env_setup_tools.configure_posix_environment()
 
-import sys
 import pyautogui
 import keyboard
 import strings
 
+pyautogui.FAILSAFE = False  # Do not crash if pointer gets out of screen
+
 
 class PainlessMouseController:
-    def __init__(self) -> None:
-        self.SPEED = 1
-        self.VERBOSE = False
+    """Allows basic mouse movements using the keyboard."""
 
-        pyautogui.FAILSAFE = False  # Do not crash if pointer gets out of screen
+    # 
+    BASE_MOVE_U, BASE_MOVE_D, BASE_MOVE_R, BASE_MOVE_L = -10, 11, 20, -20
+    FAST_MOVE_R, FAST_MOVE_L = 350, -350
+    
+    # Key mappings:
+    KEYS_ARROWS = {"up": "up", "down": "down", "right": "right", "left": "left"}
+    KEYS_VIM    = {"up": "k" , "down":    "j", "right":     "l", "left":    "h"}
 
-        self.KEYS = {"up": "up", "down": "down", "right": "right", "left": "left"}
-        self.__set_preferences()
-
-        if "--help" in sys.argv:
-            print(strings.HELP_TEXT)
-            sys.exit(0)
-
-    def __digit_indx(self) -> int:
-        """Find the index of digit in sys arguments"""
-        for i in range(len(sys.argv)):
-            arg = sys.argv[i]
-            if arg.isdigit():
-                return i
-        return -1
-
-    def __set_preferences(self) -> None:
-        """Set preferences provided by the user."""
-        if len(sys.argv) > 1:
-            if "--verbose" in sys.argv:
-                self.VERBOSE = True
-
-            # set VIM navigation keys instead of arrow
-            if "--vim" in sys.argv:
-                self.KEYS["up"] = "k"
-                self.KEYS["down"] = "j"
-                self.KEYS["left"] = "h"
-                self.KEYS["right"] = "l"
-
-            if (dindx := self.__digit_indx()) != -1:
-                self.SPEED = int(sys.argv[dindx])
+    def __init__(self, speed: int = 1, verbose: bool = False, vim_mode: bool = False):
+        """Default initializer.
+        :param speed: mouse speed, defaults to 1
+        :param verbose: verbosity setting, defaults to False
+        :param vim_mode: set to True if you want to use VIM-like keys, defaults to False
+        """
+        self.speed, self.verbose = speed, verbose
+        self.keys = self.KEYS_VIM if vim_mode else self.KEYS_ARROWS
 
     def traverse(self) -> None:
-        """Traverse to specific X, Y position in relative to current.
-        The speed of the movement can be increased by incrementing the SPEED constant.
-        """
-        movx = 0
-        movy = 0
+        """Moves the cursor to a new position according to mouse movement speed."""
+        movx, movy = 0, 0
         if keyboard.is_pressed("ctrl") and keyboard.is_pressed("shift"):
             if keyboard.is_pressed(self.KEYS["up"]):
-                movy = -10 * self.SPEED  # UP
+                movy = self.BASE_MOVE_U * self.speed
 
             if keyboard.is_pressed(self.KEYS["down"]):
-                movy = 11 * self.SPEED  # Down
+                movy = self.BASE_MOVE_D * self.speed
 
             if keyboard.is_pressed(self.KEYS["left"]):
-                movx = -20 * self.SPEED  # Left
+                movx = self.BASE_MOVE_L * self.speed
 
             if keyboard.is_pressed(self.KEYS["right"]):
-                movx = 20 * self.SPEED  # Right
+                movx = self.BASE_MOVE_R * self.speed
 
         if movx != 0 or movy != 0:
             pyautogui.move(movx, movy)
-            if self.VERBOSE:
+            if self.verbose:
                 print(pyautogui.position())
 
     def jump(self) -> None:
@@ -78,7 +59,7 @@ class PainlessMouseController:
             if keyboard.is_pressed("shift"):  # Jump backwards (left side)
                 pyautogui.move(-350, 0)
             else:
-                pyautogui.move(350, 0)  # Jump forwards (right side)
+                pyautogui.move(350, 0)  # Jump forward (right side)
 
     def click(self) -> None:
         """Simply clicks on a location."""
@@ -86,7 +67,8 @@ class PainlessMouseController:
             pyautogui.click()
 
     def run(self):
-        if self.VERBOSE:
+        """Main run method."""
+        if self.verbose:
             print(strings.INTRO_TEXT)
         while True:
             self.traverse()
@@ -95,4 +77,12 @@ class PainlessMouseController:
 
 
 if __name__ == "__main__":
-    PainlessMouseController().run()
+    parser = ArgumentParser(prog        = 'python pmc.py',
+                            description = strings.SUMMARY,
+                            epilog      = strings.EXAMPLES_AND_NOTES,
+                            formatter_class = RawTextHelpFormatter)
+    parser.add_argument('--speed'  , type=int, default=1, help=strings.SPEED)
+    parser.add_argument('--vim'    , action='store_true', help=strings.VIM)
+    parser.add_argument('--verbose', action='store_true', help=strings.VERBOSE)
+    args = parser.parse_args()
+    PainlessMouseController(speed=args.speed, verbose=args.verbose, vim_mode=args.vim).run()
