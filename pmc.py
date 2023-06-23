@@ -20,7 +20,7 @@ class PainlessMouseController:
     FAST_MOVE_R, FAST_MOVE_L = 350, -350
     # Key mappings:
     KEYS_ARROWS = {"up": "up", "down": "down", "right": "right", "left": "left"}
-    KEYS_VIM    = {"up": "k" , "down":    "j", "right":     "l", "left":    "h"}
+    KEYS_VIM = {"up": "k", "down": "j", "right": "l", "left": "h"}
 
     def __init__(self, speed: int = 1, verbose: bool = False, vim_mode: bool = False):
         """Default initializer.
@@ -56,9 +56,9 @@ class PainlessMouseController:
         """Jumps a significant portion of screen either to left or right part"""
         if keyboard.is_pressed("ctrl") and keyboard.is_pressed("tab"):
             if keyboard.is_pressed("shift"):  # Jump backwards (left side)
-                pyautogui.move(-350, 0)
+                pyautogui.move(self.FAST_MOVE_L, 0)
             else:
-                pyautogui.move(350, 0)  # Jump forward (right side)
+                pyautogui.move(self.FAST_MOVE_R, 0)  # Jump forward (right side)
 
     def click(self) -> None:
         """Simply clicks on a location."""
@@ -76,12 +76,16 @@ class PainlessMouseController:
 
 
 if __name__ == "__main__":
-    parser = ArgumentParser(prog        = 'python pmc.py',
-                            description = strings.SUMMARY,
-                            epilog      = strings.EXAMPLES_AND_NOTES,
-                            formatter_class = RawTextHelpFormatter)
-    parser.add_argument('--speed'  , type=int, default=1, help=strings.SPEED)
-    parser.add_argument('--vim'    , action='store_true', help=strings.VIM)
-    parser.add_argument('--verbose', action='store_true', help=strings.VERBOSE)
+    parser = ArgumentParser(
+        prog="python pmc.py",
+        description=strings.SUMMARY,
+        epilog=strings.EXAMPLES_AND_NOTES,
+        formatter_class=RawTextHelpFormatter,
+    )
+    parser.add_argument("--speed", type=int, default=1, help=strings.SPEED)
+    parser.add_argument("--vim", action="store_true", help=strings.VIM)
+    parser.add_argument("--verbose", action="store_true", help=strings.VERBOSE)
     args = parser.parse_args()
-    PainlessMouseController(speed=args.speed, verbose=args.verbose, vim_mode=args.vim).run()
+    PainlessMouseController(
+        speed=args.speed, verbose=args.verbose, vim_mode=args.vim
+    ).run()
