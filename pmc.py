@@ -35,16 +35,16 @@ class PainlessMouseController:
         """Moves the cursor to a new position according to mouse movement speed."""
         movx, movy = 0, 0
         if keyboard.is_pressed("ctrl") and keyboard.is_pressed("shift"):
-            if keyboard.is_pressed(self.KEYS["up"]):
+            if keyboard.is_pressed(self.keys["up"]):
                 movy = self.BASE_MOVE_U * self.speed
 
-            if keyboard.is_pressed(self.KEYS["down"]):
+            if keyboard.is_pressed(self.keys["down"]):
                 movy = self.BASE_MOVE_D * self.speed
 
-            if keyboard.is_pressed(self.KEYS["left"]):
+            if keyboard.is_pressed(self.keys["left"]):
                 movx = self.BASE_MOVE_L * self.speed
 
-            if keyboard.is_pressed(self.KEYS["right"]):
+            if keyboard.is_pressed(self.keys["right"]):
                 movx = self.BASE_MOVE_R * self.speed
 
         if movx != 0 or movy != 0:
