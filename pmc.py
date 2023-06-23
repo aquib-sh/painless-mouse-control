@@ -15,10 +15,9 @@ pyautogui.FAILSAFE = False  # Do not crash if pointer gets out of screen
 class PainlessMouseController:
     """Allows basic mouse movements using the keyboard."""
 
-    # 
+    # Movement: jump values for various directions
     BASE_MOVE_U, BASE_MOVE_D, BASE_MOVE_R, BASE_MOVE_L = -10, 11, 20, -20
     FAST_MOVE_R, FAST_MOVE_L = 350, -350
-    
     # Key mappings:
     KEYS_ARROWS = {"up": "up", "down": "down", "right": "right", "left": "left"}
     KEYS_VIM    = {"up": "k" , "down":    "j", "right":     "l", "left":    "h"}
